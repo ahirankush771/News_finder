@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Daily Wire — Latest News</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Old+Standard+TT:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2EEE3;
+    --paper-dark:#E7E1D2;
+    --ink:#1B1B16;
+    --ink-soft:#4A4640;
+    --rule:#1B1B16;
+    --accent:#8C2A1F; /* masthead red */
+    --accent-soft:#B8503F;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper-dark);
+    color:var(--ink);
+    font-family:'Source Serif 4', serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .sheet{
+    max-width:1100px;
+    margin:0 auto;
+    background:var(--paper);
+    min-height:100vh;
+    box-shadow:0 0 40px rgba(0,0,0,0.15);
+    border-left:1px solid #d8d1bd;
+    border-right:1px solid #d8d1bd;
+  }
+
+  /* MASTHEAD */
+  .masthead{
+    padding:22px 28px 14px;
+    border-bottom:4px double var(--rule);
+  }
+  .masthead-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    font-family:'Old Standard TT', serif;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .masthead-title{
+    text-align:center;
+    font-family:'Playfair Display', serif;
+    font-weight:900;
+    font-size:clamp(42px, 7vw, 76px);
+    letter-spacing:-0.01em;
+    margin:0;
+    line-height:0.95;
+  }
+  .masthead-title em{
+    font-style:italic;
+    color:var(--accent);
+  }
+  .masthead-tagline{
+    text-align:center;
+    font-family:'Old Standard TT', serif;
+    font-style:italic;
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-top:4px;
+    letter-spacing:0.02em;
+  }
+
+  /* CONTROL BAR (search + filters) styled as a "classifieds strip" */
+  .control-strip{
+    border-bottom:1px solid var(--rule);
+    background:var(--paper-dark);
+    padding:14px 28px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+    font-family:'Old Standard TT', serif;
+  }
+  .control-strip .label{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--ink-soft);
+    margin-right:2px;
+  }
+  .control-strip input[type="text"]{
+    flex:1;
+    min-width:160px;
+    padding:8px 10px;
+    border:1px solid var(--rule);
+    background:var(--paper);
+    font-family:'Source Serif 4', serif;
+    font-size:14px;
+    color:var(--ink);
+  }
+  .control-strip select{
+    padding:8px 10px;
+    border:1px solid var(--rule);
+    background:var(--paper);
+    font-family:'Source Serif 4', serif;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .control-strip button{
+    padding:8px 18px;
+    background:var(--accent);
+    color:var(--paper);
+    border:1px solid var(--rule);
+    font-family:'Old Standard TT', serif;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    font-size:12px;
+    cursor:pointer;
+    transition:background 0.15s ease;
+  }
+  .control-strip button:hover{ background:var(--accent-soft); }
+  .control-strip button:focus-visible,
+  .control-strip input:focus-visible,
+  .control-strip select:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:1px;
+  }
+
+  /* STATUS / SECTION HEADER */
+  .section-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:16px 28px 6px;
+    border-bottom:1px solid var(--rule);
+  }
+  .section-bar h2{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:700;
+    font-size:20px;
+    margin:0;
+  }
+  .section-bar .meta{
+    font-family:'Old Standard TT', serif;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+  }
+
+  /* ARTICLE GRID - newspaper columns */
+  .columns{
+    padding:18px 28px 40px;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:0 26px;
+  }
+  @media (max-width: 880px){
+    .columns{ grid-template-columns:repeat(2,1fr); }
+  }
+  @media (max-width: 600px){
+    .columns{ grid-template-columns:1fr; padding:14px 16px 30px; }
+    .masthead{ padding:16px 16px 10px; }
+    .control-strip{ padding:12px 16px; }
+    .section-bar{ padding:14px 16px 6px; }
+  }
+
+  article.story{
+    border-bottom:1px solid #cfc7ae;
+    padding:16px 0 18px;
+    break-inside:avoid;
+  }
+  article.story .eyebrow{
+    font-family:'Old Standard TT', serif;
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--accent);
+    margin-bottom:6px;
+  }
+  article.story h3{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:19px;
+    line-height:1.18;
+    margin:0 0 8px;
+  }
+  article.story h3 a{
+    color:var(--ink);
+    text-decoration:none;
+  }
+  article.story h3 a:hover{ color:var(--accent); text-decoration:underline; }
+  article.story img{
+    width:100%;
+    height:140px;
+    object-fit:cover;
+    filter:grayscale(15%) sepia(8%);
+    margin-bottom:10px;
+    border:1px solid #cfc7ae;
+  }
+  article.story p.dek{
+    font-size:14px;
+    line-height:1.48;
+    color:var(--ink-soft);
+    margin:0 0 8px;
+  }
+  article.story .byline{
+    font-family:'Old Standard TT', serif;
+    font-size:10.5px;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    display:flex;
+    justify-content:space-between;
+  }
+  article.story .byline a{ color:var(--ink-soft); }
+
+  /* leading story (first item) spans full width with bigger type */
+  article.story.lead{
+    grid-column:1 / -1;
+    border-bottom:3px double var(--rule);
+    padding-bottom:22px;
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:20px;
+    align-items:start;
+  }
+  article.story.lead img{ height:240px; margin-bottom:0; }
+  article.story.lead h3{ font-size:32px; line-height:1.08; }
+  article.story.lead p.dek{ font-size:15.5px; }
+
+  /* STATES */
+  .state-box{
+    padding:60px 28px;
+    text-align:center;
+    font-family:'Old Standard TT', serif;
+  }
+  .state-box .big{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:22px;
+    margin-bottom:8px;
+  }
+  .state-box .small{
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .spinner{
+    width:28px;height:28px;
+    border:3px solid var(--rule);
+    border-top-color:transparent;
+    border-radius:50%;
+    margin:0 auto 16px;
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  footer.colophon{
+    border-top:4px double var(--rule);
+    padding:14px 28px;
+    text-align:center;
+    font-family:'Old Standard TT', serif;
+    font-size:11px;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <div class="masthead">
+    <div class="masthead-top">
+      <span id="todayDate">—</span>
+      <span>Daily Edition · World Wide Web</span>
+    </div>
+    <h1 class="masthead-title">The Daily <em>Wire</em></h1>
+    <div class="masthead-tagline">"Jo Khabar Sach Hai, Wahi Khabar Hai" — Powered by NewsData.io</div>
+  </div>
+
+  <div class="control-strip">
+    <span class="label">Search</span>
+    <input type="text" id="keyword" placeholder="e.g. cricket, election, AI..." />
+
+    <span class="label">Category</span>
+    <select id="category">
+      <option value="">All</option>
+      <option value="top">Top</option>
+      <option value="business">Business</option>
+      <option value="entertainment">Entertainment</option>
+      <option value="environment">Environment</option>
+      <option value="food">Food</option>
+      <option value="health">Health</option>
+      <option value="politics">Politics</option>
+      <option value="science">Science</option>
+      <option value="sports">Sports</option>
+      <option value="technology">Technology</option>
+      <option value="world">World</option>
+    </select>
+
+    <span class="label">Country</span>
+    <select id="country">
+      <option value="">All</option>
+      <option value="in">India</option>
+      <option value="us">United States</option>
+      <option value="gb">United Kingdom</option>
+      <option value="au">Australia</option>
+      <option value="ca">Canada</option>
+      <option value="pk">Pakistan</option>
+      <option value="cn">China</option>
+      <option value="jp">Japan</option>
+      <option value="ae">UAE</option>
+    </select>
+
+    <button id="searchBtn">Find News</button>
+  </div>
+
+  <div class="section-bar">
+    <h2 id="sectionTitle">Latest Dispatch</h2>
+    <span class="meta" id="resultMeta"></span>
+  </div>
+
+  <div id="content" class="columns">
+    <div class="state-box" style="grid-column:1/-1;">
+      <div class="spinner"></div>
+      <div class="big">Khabron ko taaza kiya ja raha hai...</div>
+      <div class="small">Please wait while we fetch the latest news</div>
+    </div>
+  </div>
+
+  <footer class="colophon">
+    The Daily Wire · An independent aggregator · Data via NewsData.io
+  </footer>
+
+</div>
+
+<script>
+const API_KEY = "pub_267ff8b7a9684984aca948d46fc46d75";
+const BASE_URL = "https://newsdata.io/api/1/latest";
+// Browser se direct API call CORS block hoti hai, isliye proxy ke through jaate hain.
+// Multiple proxies try karte hain - agar ek fail ho to dusra use ho.
+const PROXIES = [
+  (url) => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
+  (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  (url) => `https://thingproxy.freeboard.io/fetch/${url}`
+];
+
+const contentEl = document.getElementById('content');
+const sectionTitleEl = document.getElementById('sectionTitle');
+const resultMetaEl = document.getElementById('resultMeta');
+const todayDateEl = document.getElementById('todayDate');
+
+function formatTodayDate(){
+  const d = new Date();
+  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  todayDateEl.textContent = d.toLocaleDateString('en-IN', opts);
+}
+formatTodayDate();
+
+function timeAgo(dateStr){
+  if(!dateStr) return "";
+  const then = new Date(dateStr.replace(' ', 'T') + 'Z');
+  const diffMs = Date.now() - then.getTime();
+  const mins = Math.floor(diffMs/60000);
+  if(mins < 1) return "just now";
+  if(mins < 60) return mins + " min ago";
+  const hrs = Math.floor(mins/60);
+  if(hrs < 24) return hrs + " hr ago";
+  const days = Math.floor(hrs/24);
+  return days + " day" + (days>1?"s":"") + " ago";
+}
+
+function renderLoading(){
+  contentEl.innerHTML = `
+    <div class="state-box" style="grid-column:1/-1;">
+      <div class="spinner"></div>
+      <div class="big">Khabron ko taaza kiya ja raha hai...</div>
+      <div class="small">Please wait while we fetch the latest news</div>
+    </div>`;
+}
+
+function renderError(msg){
+  contentEl.innerHTML = `
+    <div class="state-box" style="grid-column:1/-1;">
+      <div class="big">Khabar Nahi Mili</div>
+      <div class="small">${msg}</div>
+    </div>`;
+}
+
+function renderEmpty(){
+  contentEl.innerHTML = `
+    <div class="state-box" style="grid-column:1/-1;">
+      <div class="big">Koi Result Nahi Mila</div>
+      <div class="small">Try a different keyword, category, or country.</div>
+    </div>`;
+}
+
+function escapeHtml(str){
+  if(!str) return "";
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+function renderArticles(articles){
+  if(!articles || articles.length === 0){
+    renderEmpty();
+    return;
+  }
+
+  let html = "";
+  articles.forEach((a, idx) => {
+    const isLead = idx === 0;
+    const title = escapeHtml(a.title || "Untitled");
+    const dek = escapeHtml(a.description ? (a.description.length > 160 ? a.description.slice(0,160) + "…" : a.description) : "");
+    const source = escapeHtml(a.source_name || a.source_id || "Unknown Source");
+    const category = (a.category && a.category.length) ? escapeHtml(a.category[0]) : "News";
+    const img = a.image_url ? `<img src="${a.image_url}" alt="${title}" loading="lazy" onerror="this.style.display='none'">` : "";
+    const ago = timeAgo(a.pubDate);
+    const link = a.link || "#";
+
+    html += `
+      <article class="story ${isLead ? 'lead' : ''}">
+        <div>
+          ${img}
+        </div>
+        <div>
+          <div class="eyebrow">${category}</div>
+          <h3><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h3>
+          <p class="dek">${dek}</p>
+          <div class="byline">
+            <span>${source}</span>
+            <span>${ago}</span>
+          </div>
+        </div>
+      </article>`;
+  });
+
+  contentEl.innerHTML = html;
+}
+
+async function fetchNews(){
+  renderLoading();
+
+  const keyword = document.getElementById('keyword').value.trim();
+  const category = document.getElementById('category').value;
+  const country = document.getElementById('country').value;
+
+  const params = new URLSearchParams();
+  params.set('apikey', API_KEY);
+  params.set('language', 'en');
+  if(keyword) params.set('q', keyword);
+  if(category) params.set('category', category);
+  if(country) params.set('country', country);
+
+  // update section title to reflect the query
+  let titleParts = [];
+  if(keyword) titleParts.push(`"${keyword}"`);
+  if(category) titleParts.push(category.charAt(0).toUpperCase() + category.slice(1));
+  if(country) titleParts.push(document.getElementById('country').selectedOptions[0].text);
+  sectionTitleEl.textContent = titleParts.length ? titleParts.join(' · ') : 'Latest Dispatch';
+
+  try{
+    const targetUrl = `${BASE_URL}?${params.toString()}`;
+    let data = null;
+    let lastError = null;
+
+    for(const buildProxyUrl of PROXIES){
+      try{
+        const proxyUrl = buildProxyUrl(targetUrl);
+        const res = await fetch(proxyUrl);
+        if(!res.ok){
+          lastError = new Error(`Proxy returned status ${res.status}`);
+          continue;
+        }
+        const text = await res.text();
+        const parsed = JSON.parse(text);
+        if(parsed.status === "success" || parsed.results){
+          data = parsed;
+          break;
+        }else{
+          lastError = new Error(parsed?.results?.message || "API returned an error");
+          continue;
+        }
+      }catch(innerErr){
+        lastError = innerErr;
+        continue;
+      }
+    }
+
+    if(!data){
+      throw lastError || new Error("All proxies failed");
+    }
+
+    if(data.status !== "success"){
+      throw new Error(data?.results?.message || "Unknown API error");
+    }
+
+    const articles = data.results || [];
+    resultMetaEl.textContent = articles.length ? `${articles.length} stories · Updated ${new Date().toLocaleTimeString('en-IN')}` : '';
+    renderArticles(articles);
+
+  }catch(err){
+    console.error(err);
+    let msg = err.message || "Something went wrong while fetching news.";
+    renderError(msg);
+    resultMetaEl.textContent = '';
+  }
+}
+
+document.getElementById('searchBtn').addEventListener('click', fetchNews);
+document.getElementById('keyword').addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') fetchNews();
+});
+document.getElementById('category').addEventListener('change', fetchNews);
+document.getElementById('country').addEventListener('change', fetchNews);
+
+// initial load
+fetchNews();
+</script>
+
+</body>
+</html>
